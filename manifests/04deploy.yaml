@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-deployment
+  labels:
+    app: ubuntu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu
+  template:
+    metadata:
+      labels:
+        app: ubuntu
+    spec:
+      containers:
+      - name: ubuntu-container
+        image: ubuntu
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do echo 'Hello, Kubernetes!'; sleep 10; done"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /tmp/etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: example-bundle
+          items:
+          - key: trust-bundle.pem
+            path: trust-bundle.pem

@@ -12,6 +12,8 @@ delete_cluster() {
 
 # Función para instalar cert-manager con trust manager
 install_cert_manager_with_trust_manager() {
+    # Agrega repositorio certmanager
+    helm repo add jetstack https://charts.jetstack.io --force-update
     # Instalar cert-manager
     helm install \
     cert-manager jetstack/cert-manager \
@@ -36,6 +38,9 @@ install_cert_manager_with_trust_manager() {
     kubectl get pods --namespace trust-manager
 
     echo "Cert-Manager con Trust Manager ha sido instalado exitosamente en el clúster de Kind."
+    for i in {01..04};
+        do kubectl apply -f "manifests/$i*"
+    done
 }
 
 # Función principal
